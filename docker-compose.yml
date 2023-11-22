@@ -1,0 +1,39 @@
+version: "3"
+services:
+  app:
+    image: webdevops/php-nginx:8.2-alpine
+    container_name: comerc_app
+    ports:
+      - 8000:80
+    volumes:
+      - ./app:/app
+    environment:
+      WEB_DOCUMENT_ROOT: /app/public
+    networks:
+      comerc_network:
+
+  db:
+    image: mysql
+    container_name: comerc_db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: comerc
+      MYSQL_USER: comerc
+      MYSQL_PASSWORD: comerc
+      MYSQL_ROOT_PASSWORD: comerc-root
+    networks:
+      comerc_network:
+
+  adminer:
+    image: adminer
+    container_name: comerc_adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      comerc_network:
+
+networks:
+  comerc_network:
+    driver: bridge
