@@ -1,14 +1,13 @@
 version: "3"
 services:
   app:
-    image: webdevops/php-nginx:8.2-alpine
+    build:
+      context: .
     container_name: comerc_app
     ports:
       - 8000:80
     volumes:
       - ./app:/app
-    environment:
-      WEB_DOCUMENT_ROOT: /app/public
     networks:
       comerc_network:
 
