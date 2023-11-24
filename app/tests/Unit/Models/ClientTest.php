@@ -6,68 +6,56 @@ namespace Tests\Unit\Models;
 
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
+use Tests\TestCase;
 use App\Models\Client;
 
 class ClientTest extends TestCase
 {
-    use DatabaseMigrations;
     use DatabaseTransactions;
 
     /** @test */
-    public function can_create_a_client_and_check_email_uniqueness()
+    public function can_create_a_client_check_email_uniqueness_and_soft_delete()
     {
         // Crie um cliente
         $clientData = [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'phone' => '123-456-7890',
-            'birthday' => '1990-01-01',
-            'address1' => '123 Main St',
-            'postalcode' => '12345',
-            'city' => 'Example City',
-            'state' => 'CA',
+            'name' => 'Josué Alessandro',
+            'email' => 'josuealessandro@gmail.com',
+            'phone' => '11992886337',
+            'birthday' => '1987-10-17',
+            'address1' => 'Rua Geolandia, 1009',
+            'address3' => 'Vila Medeiros',
+            'postalcode' => '02217000',
+            'city' => 'São Paulo',
+            'state' => 'SP',
         ];
 
+        // Teste a criação do cliente
         $client = Client::create($clientData);
 
         $this->assertInstanceOf(Client::class, $client);
         $this->assertEquals($clientData['name'], $client->name);
         $this->assertEquals($clientData['email'], $client->email);
 
-        // Tente criar outro cliente com o mesmo e-mail
+        // Tente criar outro cliente com o mesmo e-mail (teste de duplicidade)
         $this->expectException(\PDOException::class);
         $this->expectExceptionMessage('Duplicate entry');
 
         Client::create([
-            'name' => 'Jane Smith',
-            'email' => 'john@example.com', // Mesmo e-mail
-            'phone' => '987-654-3210',
-            'birthday' => '1985-05-05',
-            'address1' => '456 Elm St',
-            'postalcode' => '54321',
-            'city' => 'Another City',
-            'state' => 'NY',
+            'name' => 'Josué Omena',
+            'email' => 'josuealessandro@gmail.com',
+            'phone' => '11992886337',
+            'birthday' => '1987-10-17',
+            'address1' => 'Rua Geolandia, 1009',
+            'address3' => 'Vila Medeiros',
+            'postalcode' => '02217000',
+            'city' => 'São Paulo',
+            'state' => 'SP',
         ]);
-    }
 
-    /** @test */
-    public function can_soft_delete_a_client()
-    {
-        $clientData = [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'phone' => '123-456-7890',
-            'birthday' => '1990-01-01',
-            'address1' => '123 Main St',
-            'postalcode' => '12345',
-            'city' => 'Example City',
-            'state' => 'CA',
-        ];
-
-        $client = Client::create($clientData);
-
+        // Exclua suavemente o cliente
         $client->delete();
 
+        // Verifique se o cliente foi excluído suavemente
         $this->assertSoftDeleted('clients', ['id' => $client->id]);
     }
 }
