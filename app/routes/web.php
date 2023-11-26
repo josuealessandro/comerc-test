@@ -16,3 +16,12 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->post('/clients', 'ClientController@create');
+    $router->get('/clients', 'ClientController@getAll');
+    $router->put('/clients/{id}', 'ClientController@update');
+    $router->delete('/clients/{id}', 'ClientController@delete');
+});
+
+$router->post('/api/clients/email/', 'ClientController@getByEmail');

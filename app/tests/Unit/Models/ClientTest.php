@@ -4,7 +4,8 @@ namespace Tests\Unit\Models;
 
 // tests/Unit/ClientTest.php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
+use App\Services\ClientService;
+use Faker\Factory as FakerFactory;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use App\Models\Client;
@@ -12,21 +13,33 @@ use App\Models\Client;
 class ClientTest extends TestCase
 {
     use DatabaseTransactions;
+    protected $faker;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->clientService = new ClientService();
+        $this->faker = FakerFactory::create();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
 
     /** @test */
     public function can_create_a_client_check_email_uniqueness_and_soft_delete()
     {
         // Crie um cliente
         $clientData = [
-            'name' => 'Josué Alessandro',
-            'email' => 'josuealessandro@gmail.com',
-            'phone' => '11992886337',
-            'birthday' => '1987-10-17',
-            'address1' => 'Rua Geolandia, 1009',
-            'address3' => 'Vila Medeiros',
-            'postalcode' => '02217000',
-            'city' => 'São Paulo',
-            'state' => 'SP',
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->phoneNumber,
+            'birthday' => $this->faker->date,
+            'address1' => $this->faker->streetAddress,
+            'postalcode' => $this->faker->postcode,
+            'city' => $this->faker->city,
+            'state' => $this->faker->stateAbbr,
         ];
 
         // Teste a criação do cliente
@@ -41,15 +54,14 @@ class ClientTest extends TestCase
         $this->expectExceptionMessage('Duplicate entry');
 
         Client::create([
-            'name' => 'Josué Omena',
-            'email' => 'josuealessandro@gmail.com',
-            'phone' => '11992886337',
-            'birthday' => '1987-10-17',
-            'address1' => 'Rua Geolandia, 1009',
-            'address3' => 'Vila Medeiros',
-            'postalcode' => '02217000',
-            'city' => 'São Paulo',
-            'state' => 'SP',
+            'name' => $this->faker->name,
+            'email' => $client->email,
+            'phone' => $this->faker->phoneNumber,
+            'birthday' => $this->faker->date,
+            'address1' => $this->faker->streetAddress,
+            'postalcode' => $this->faker->postcode,
+            'city' => $this->faker->city,
+            'state' => $this->faker->stateAbbr,
         ]);
 
         // Exclua suavemente o cliente
