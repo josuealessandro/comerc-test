@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\EmailService;
 use Illuminate\Http\Request;
 use App\Services\OrderService;
 
@@ -14,10 +15,12 @@ use App\Services\OrderService;
 class OrderController extends Controller
 {
     protected $orderService;
+    protected $emailService;
 
-    public function __construct(OrderService $orderService)
+    public function __construct(OrderService $orderService, EmailService $emailService)
     {
         $this->orderService = $orderService;
+        $this->emailService = $emailService;
     }
 
     /**
@@ -60,6 +63,7 @@ class OrderController extends Controller
 
         try {
             $order = $this->orderService->createOrder($data);
+            $this->emailService->sendOrderConfirmationEmail($order->client->email, $order, $order->client, $order->products);
             return response()->json($order, 201);
         } catch (\InvalidArgumentException $e) {
             return response()->json(['error' => $e->getMessage()], 404);
