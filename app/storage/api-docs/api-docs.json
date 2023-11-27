@@ -183,6 +183,353 @@
                     }
                 ]
             }
+        },
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Lista todos os produtos",
+                "description": "Obtém a lista de todos os produtos cadastrados",
+                "operationId": "1bfaa78d1c2c3848ab8165c5dadcad3e",
+                "responses": {
+                    "200": {
+                        "description": "Lista de produtos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Cria um novo produto",
+                "description": "Cria um novo produto com os dados fornecidos",
+                "operationId": "9934bcf87d6613c14890dbdd587d311a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Produto criado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na solicitação"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products/search": {
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Pesquisa produtos por nome",
+                "description": "Pesquisa produtos com base no nome fornecido",
+                "operationId": "42bad88497a6972707ac7672fd5eb6e3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nome do produto para pesquisa",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Lista de produtos correspondentes à pesquisa"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Obtém os detalhes de um produto por ID",
+                "description": "Obtém os detalhes de um produto com base no ID",
+                "operationId": "7ab21ddb713501f3d4c2914892c02a21",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do produto"
+                    },
+                    "404": {
+                        "description": "Produto não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Atualiza um produto por ID",
+                "description": "Atualiza os detalhes de um produto com base no ID",
+                "operationId": "6a7e11900844cd85cff66e662b82bd4c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Produto atualizado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na solicitação"
+                    },
+                    "404": {
+                        "description": "Produto não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Exclui um produto por ID",
+                "description": "Exclui um produto com base no ID",
+                "operationId": "f6c90648962771c8aec7c8aae3d162fa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produto excluído com sucesso"
+                    },
+                    "404": {
+                        "description": "Produto não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/product-photos": {
+            "post": {
+                "tags": [
+                    "Product Photos"
+                ],
+                "summary": "Cria uma nova foto de produto",
+                "description": "Cria uma nova foto de produto com os dados fornecidos",
+                "operationId": "74d2ac9c8d3bd7363dbfa9d713973a8a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductPhoto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Foto de produto criada com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na solicitação"
+                    },
+                    "404": {
+                        "description": "Produto não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/product-photos/{id}": {
+            "put": {
+                "tags": [
+                    "Product Photos"
+                ],
+                "summary": "Atualiza uma foto de produto por ID",
+                "description": "Atualiza os detalhes de uma foto de produto com base no ID",
+                "operationId": "7b7d60115d93f74922be1325ee82d171",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da foto de produto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductPhoto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Foto de produto atualizada com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na solicitação"
+                    },
+                    "404": {
+                        "description": "Foto de produto não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Product Photos"
+                ],
+                "summary": "Exclui uma foto de produto por ID",
+                "description": "Exclui uma foto de produto com base no ID",
+                "operationId": "b480ff4ca1cda23493d1d02b6a111b01",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da foto de produto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Foto de produto excluída com sucesso"
+                    },
+                    "404": {
+                        "description": "Foto de produto não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/product-photos/{productId}": {
+            "get": {
+                "tags": [
+                    "Product Photos"
+                ],
+                "summary": "Obtém todas as fotos de um produto por ID",
+                "description": "Obtém todas as fotos de um produto com base no ID do produto",
+                "operationId": "c02e5edbd30873f4d7572f5b9f1ea162",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fotos do produto"
+                    },
+                    "404": {
+                        "description": "Produto não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -231,6 +578,36 @@
                     }
                 },
                 "type": "object"
+            },
+            "Product": {
+                "required": [
+                    "name",
+                    "price_cents"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "price_cents": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "ProductPhoto": {
+                "required": [
+                    "product_id",
+                    "url"
+                ],
+                "properties": {
+                    "product_id": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -238,6 +615,14 @@
         {
             "name": "Clients",
             "description": "API para gerenciar clientes"
+        },
+        {
+            "name": "Products",
+            "description": "API para gerenciar produtos"
+        },
+        {
+            "name": "Product Photos",
+            "description": "API para gerenciar fotos de produtos"
         }
     ]
 }

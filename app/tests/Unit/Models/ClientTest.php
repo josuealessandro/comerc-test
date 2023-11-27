@@ -2,9 +2,6 @@
 
 namespace Tests\Unit\Models;
 
-// tests/Unit/ClientTest.php
-
-use App\Services\ClientService;
 use Faker\Factory as FakerFactory;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -18,7 +15,6 @@ class ClientTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->clientService = new ClientService();
         $this->faker = FakerFactory::create();
     }
 
@@ -28,9 +24,8 @@ class ClientTest extends TestCase
     }
 
     /** @test */
-    public function can_create_a_client_check_email_uniqueness_and_soft_delete()
+    public function testCanCreateAClient()
     {
-        // Crie um cliente
         $clientData = [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
@@ -42,14 +37,28 @@ class ClientTest extends TestCase
             'state' => $this->faker->stateAbbr,
         ];
 
-        // Teste a criação do cliente
         $client = Client::create($clientData);
 
         $this->assertInstanceOf(Client::class, $client);
         $this->assertEquals($clientData['name'], $client->name);
         $this->assertEquals($clientData['email'], $client->email);
+    }
 
-        // Tente criar outro cliente com o mesmo e-mail (teste de duplicidade)
+    public function testCheckEmailUniqueness()
+    {
+        $clientData = [
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->phoneNumber,
+            'birthday' => $this->faker->date,
+            'address1' => $this->faker->streetAddress,
+            'postalcode' => $this->faker->postcode,
+            'city' => $this->faker->city,
+            'state' => $this->faker->stateAbbr,
+        ];
+
+        $client = Client::create($clientData);
+
         $this->expectException(\PDOException::class);
         $this->expectExceptionMessage('Duplicate entry');
 
@@ -63,11 +72,26 @@ class ClientTest extends TestCase
             'city' => $this->faker->city,
             'state' => $this->faker->stateAbbr,
         ]);
+    }
 
-        // Exclua suavemente o cliente
+    public function testSoftDeleteClient()
+    {
+        $clientData = [
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->phoneNumber,
+            'birthday' => $this->faker->date,
+            'address1' => $this->faker->streetAddress,
+            'postalcode' => $this->faker->postcode,
+            'city' => $this->faker->city,
+            'state' => $this->faker->stateAbbr,
+        ];
+
+        $client = Client::create($clientData);
+
         $client->delete();
 
-        // Verifique se o cliente foi excluído suavemente
-        $this->assertSoftDeleted('clients', ['id' => $client->id]);
+        $this->assertNull(Client::find($client->id));
+        $this->assertTrue(Client::withTrashed()->where('id', $client->id)->exists());
     }
 }

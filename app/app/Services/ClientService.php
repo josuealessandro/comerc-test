@@ -40,4 +40,9 @@ class ClientService
         // Retorna todos os clientes da tabela 'clients'
         return Client::all();
     }
+
+    public function getClientById($id)
+    {
+        return Client::find($id);
+    }
 }

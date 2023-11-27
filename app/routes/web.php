@@ -17,11 +17,27 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'api'], function () use ($router) {
-    $router->post('/clients', 'ClientController@create');
-    $router->get('/clients', 'ClientController@getAll');
-    $router->put('/clients/{id}', 'ClientController@update');
-    $router->delete('/clients/{id}', 'ClientController@delete');
+$router->group(['prefix' => 'api/clients'], function () use ($router) {
+    $router->post('/', 'ClientController@create');
+    $router->get('/', 'ClientController@getAll');
+    $router->get('/{id}', 'ProductController@show');
+    $router->put('/{id}', 'ClientController@update');
+    $router->delete('/{id}', 'ClientController@delete');
+    $router->post('/email/', 'ClientController@getByEmail');
 });
 
-$router->post('/api/clients/email/', 'ClientController@getByEmail');
+$router->group(['prefix' => 'api/products'], function () use ($router) {
+    $router->get('/', 'ProductController@index');
+    $router->post('/', 'ProductController@create');
+    $router->get('/{id}', 'ProductController@show');
+    $router->put('/{id}', 'ProductController@update');
+    $router->delete('/{id}', 'ProductController@delete');
+    $router->post('/search/', 'ProductController@search');
+});
+
+$router->group(['prefix' => 'api/product-photos'], function ($router) {
+    $router->post('/', 'ProductPhotoController@create');
+    $router->put('/{id}', 'ProductPhotoController@update');
+    $router->delete('/{id}', 'ProductPhotoController@delete');
+    $router->get('/{productId}', 'ProductPhotoController@getByProductId');
+});

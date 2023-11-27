@@ -103,7 +103,13 @@ class ClientController extends Controller
      */
     public function getByEmail(Request $request)
     {
-        $client = $this->clientService->getClientByEmail($request['email']);
+        $this->validate($request, [
+            'email' => 'required|string|email',
+        ]);
+
+        $email = $request->input('email');
+
+        $client = $this->clientService->getClientByEmail($email);
 
         if (!$client) {
             return response()->json(['error' => 'Cliente não encontrado.'], 404);
@@ -156,15 +162,15 @@ class ClientController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|string',
-            'phone' => 'required|string',
-            'birthday' => 'required|date',
-            'address1' => 'required|string',
-            'address2' => 'nullable|string',
-            'address3' => 'nullable|string',
-            'postalcode' => 'required|string',
-            'city' => 'required|string',
-            'state' => 'required|string',
+            'name' => 'string',
+            'phone' => 'string',
+            'birthday' => 'date',
+            'address1' => 'string',
+            'address2' => 'string',
+            'address3' => 'string',
+            'postalcode' => 'string',
+            'city' => 'string',
+            'state' => 'string',
         ]);
 
         $data = $request->all();
