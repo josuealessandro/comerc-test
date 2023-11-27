@@ -1,5 +1,7 @@
 <?php
 
+// app/Models/Order.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,20 +9,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Product extends Model
+class Order extends Model
 {
     use SoftDeletes;
     use HasFactory;
 
     protected $primaryKey = 'id';
     public $incrementing = false;
-    protected $keyType = 'string';
+    protected $keyType = 'uuid';
 
     protected $fillable = [
-        'id', 'name', 'price_cents'
+        'client_id',
+        'total_price_cents',
     ];
-
-    protected $dates = ['deleted_at'];
 
     public static function boot()
     {
@@ -31,14 +32,15 @@ class Product extends Model
         });
     }
 
-    public function photos()
+    public function client()
     {
-        return $this->hasMany(ProductPhoto::class);
+        return $this->belongsTo(Client::class);
     }
 
-    public function orders()
+    public function products()
     {
-        return $this->belongsToMany(Order::class)->withPivot('price_cents');
+        return $this->belongsToMany(Product::class, 'orders_products')
+            ->withPivot('price_cents')
+            ->withTimestamps();
     }
-
 }

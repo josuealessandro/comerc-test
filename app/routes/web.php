@@ -41,3 +41,13 @@ $router->group(['prefix' => 'api/product-photos'], function ($router) {
     $router->delete('/{id}', 'ProductPhotoController@delete');
     $router->get('/{productId}', 'ProductPhotoController@getByProductId');
 });
+
+$router->group(['prefix' => 'api/orders'], function ($router) {
+    $router->post('/', 'OrderController@create');
+    $router->delete('/{id}', 'OrderController@delete');
+    $router->get('/by-product/{productId}', 'OrderController@getByProduct');
+    $router->get('/by-client/{clientId}', 'OrderController@getByClient');
+    $router->get('/{id}', 'OrderController@getById');
+    $router->get('/', 'OrderController@getAll');
+});
+

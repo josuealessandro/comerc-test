@@ -184,6 +184,207 @@
                 ]
             }
         },
+        "/api/orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Lista todos os pedidos",
+                "description": "Lista todos os pedidos existentes",
+                "operationId": "c158303af72aae3adbb12e6cb25bd18f",
+                "responses": {
+                    "200": {
+                        "description": "Lista de pedidos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Cria um novo pedido",
+                "description": "Cria um novo pedido com os dados fornecidos",
+                "operationId": "ea7f9f7ac84384bee1c0ea5239cfee15",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "client_id": {
+                                        "description": "ID do cliente para o qual o pedido será associado",
+                                        "type": "string"
+                                    },
+                                    "product_ids": {
+                                        "description": "Array de IDs dos produtos a serem adicionados ao pedido",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pedido criado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na solicitação"
+                    },
+                    "404": {
+                        "description": "Cliente ou produto(s) não encontrado(s)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Obtém um pedido por ID",
+                "description": "Obtém um pedido com base no ID do pedido",
+                "operationId": "a773a915306d5a555fe1113dbab9f47f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do pedido",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pedido encontrado"
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Exclui um pedido por ID",
+                "description": "Exclui um pedido com base no ID",
+                "operationId": "ef513f50b6388bee44655beb368d8e3e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do pedido",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pedido excluído com sucesso"
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/orders/by-product/{productId}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Obtém pedidos por produto",
+                "description": "Obtém todos os pedidos que contêm o produto com base no ID do produto",
+                "operationId": "c60d5f1fe3bed0df29d90c2c3c68e57f",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pedidos que contêm o produto"
+                    },
+                    "404": {
+                        "description": "Produto não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/orders/by-client/{clientId}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Obtém pedidos por cliente",
+                "description": "Obtém todos os pedidos associados a um cliente com base no ID do cliente",
+                "operationId": "6c407fdbb001fd66ebae9d47d7ec87af",
+                "parameters": [
+                    {
+                        "name": "clientId",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pedidos associados ao cliente"
+                    },
+                    "404": {
+                        "description": "Cliente não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
@@ -615,6 +816,10 @@
         {
             "name": "Clients",
             "description": "API para gerenciar clientes"
+        },
+        {
+            "name": "Orders",
+            "description": "API para gerenciar pedidos"
         },
         {
             "name": "Products",
